@@ -1,0 +1,37 @@
+
+
+[build-system]
+requires = [
+    "setuptools>=49",
+    "wheel",
+    "setuptools-scm",
+]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "snptool"
+authors = [
+    { name = "Carsten Friis Rundsten", email = "carsten.rundsten@sund.ku.dk" },
+]
+description = "Write some description here..."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "GNU-GLPv3"}
+dependencies = [
+    "click>=8.0.0",
+    "pandas>=2.0.0",
+]
+dynamic = ["version"]
+
+
+[project.scripts]
+snptool = "cli:Snptool"
+SNPextractor = "cli:Extract"
+
+
+[tool.setuptools.dynamic]
+version = {attr = "cli.version.__version__"}
+
+
+
