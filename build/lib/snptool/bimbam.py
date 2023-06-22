@@ -45,12 +45,7 @@ class BIMBAMstream(Querystream):
     def __iter__(self):
         return self
 
-# TODO: Need error handling on a ValueError here, and I need to be able to customize the 'DS' & 'GT' thing from user input
-# TODO: Need to check that the first base is the minor allele (Is this necessary?)
     def __next__(self):
-#        index = cols[8].split(":").index("DS")
-#        genotypes = list(map(lambda x: x.split(":")[index] , cols[9:]))
-#        out = ", ".join(cols[2:5] + genotypes) + "\n"
         cols = next(self.process.stdout).split(" ")
         if float(cols[0]) > 0.5:
             cols[2:4] = (cols[3], cols[2])
