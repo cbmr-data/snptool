@@ -37,15 +37,13 @@ class SNPstream(object):
            options:  A text string for shlex.split() with extra options for thebcftools call
            regions:  A list which returns text lines suitable for bcftools --regions-file."""
         super().__init__()
-        region_str = ""
-        for region in regions:
-            region_str += str(region)
         self.command = ['bcftools', command] + shlex.split(options)
-        self.command += ['--regions-file', '-', filename] if region_str else [filename]
+        self.command += ['--regions-file', '-', filename] if regions else [filename]
         logger.debug(f"SNPstream: command = {self.command}")
         logger.info(f"SNPstream: Executing command '{' '.join(self.command)}'")
-        self.process = subprocess.Popen(self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, bufsize=1, text=True)
-        self.process.stdin.write(region_str)
+        self.process = subprocess.Popen(self.command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, text=True)
+        for region in regions:
+            self.process.stdin.write(str(region)+"\n")
         self.process.stdin.close()
         self = self._process_header(header)
         SNPstream._validate(self)
@@ -53,8 +51,9 @@ class SNPstream(object):
     @staticmethod
     def _validate(self):
         """Validate stuff..."""
-#            output, self.error = process.communicate()
-#            exit_status = process.returncode
+        if errors := list(self.process.stderr):
+            logger.error(f"SNPstream: ERROR detected opening input file '{self.command[-1]}'. Errors were:\n{''.join(errors)}")
+            sys.exit("Terminating...")
         try:
             line = next(self.process.stdout)
             logger.debug(f"SNPstream: Detected source = {self.source}, build = {self.dbsnp_build}, reference = {self.reference}")
@@ -97,7 +96,7 @@ class SNPstream(object):
                 logger.debug(f"SNPstream: Meta analysis found 'reference = {self.reference}'")
             if not line.startswith('##'):
                 break
-        self.header = self.meta[-1] if header else False
+        self.header = self.meta[-1] if self.meta and header else False
         return self
 
     def concat(self, other):

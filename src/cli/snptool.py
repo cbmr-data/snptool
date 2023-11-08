@@ -51,7 +51,9 @@ def cli(ctx, dbsnp_build, log, database_path):
         raise ValueError(f"Invalid log level: '{log}'")
     logging.basicConfig(level=log_num)
     try: ctx.obj = snptool.SnptoolDatabase(f"{database_path}/{dbsnp_build}.db")
-    except: logging.warning(f"cli: Unable to connect to database at '{database_path}/{dbsnp_build}.db'. Functions requiring the database will not work.")
+    except sqlite3.Error as error: 
+        logging.warning(f"cli: Unable to connect to database at '{database_path}/{dbsnp_build}.db'. Functions requiring the database will not work.")
+        logging.error(f"cli: ERROR - {error}")
 
 #@cli.result_callback()
 #def cli_callback(dbsnp, dbsnp_build_id, log, snptool_db_path):

@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 ##################################################
 #
-# --%%  RUN: Define CLASS  %%--
+# --%%  RUN: Define CLASS SnptoolDatabase  %%--
 
 class SnptoolDatabase(object):
     """Class for translating rsids using a database with a sqlite table created from dbsnp. Can hold more than one
@@ -30,14 +30,22 @@ class SnptoolDatabase(object):
 
     def __init__(self, db_path, reference="GRCh37"):
         """db_path: Path to the database"""
-        logging.debug(f"SnptoolDatabase: Attempting to connect to sqlite database at '{db_path}'.")
-        self.conn = sqlite3.connect(db_path)
+        logging.info(f"SnptoolDatabase: Attempting to connect to sqlite database at '{db_path}'.")
         (self.path, self.file) = db_path.rsplit("/", maxsplit=1)
         self.reference = reference
-        logging.debug(f"SnptoolDatabase: Connected to sqlite database at path = '{self.path}', file = '{self.file}', table = '{self.table}'")
+        try:
+            self.conn   = sqlite3.connect(db_path)
+            self.cursor = self.conn.cursor()
+            logging.info(f"SnptoolDatabase: Connected to sqlite database at path = '{self.path}', file = '{self.file}', table = '{self.table}'")
+            self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';") # Getting all tables from sqlite_master
+            logger.debug(f"SnptoolDatabase: sqlite tables = {self.cursor.fetchall()}")
+        except sqlite3.Error as error:
+            logger.error(f"SnptoolDatabase: Database Access Failed.", error)
+            self.close()
 
     def close(self):
-        """Close the database connection"""
+        """Close the database connection."""
+        self.cursor.commit()
         self.conn.close()
 
     def create_table(self, dbsnp, reference):
@@ -67,12 +75,14 @@ class SnptoolDatabase(object):
 
     def rsid2coords(self, rsid, reference):
         """rsid: Some kind of iterable with rsids to translate into genomic coordinates"""
-        logging.debug(f"SnptoolDatabase: Searching for ids[0:10] = {rsid[0:10]}...")
+        logger.debug(f"SnptoolDatabase: Searching for ids[0:10] = {rsid[0:10]}...")
         self.reference = reference
         c = self.conn.cursor()
+        logger.debug(f"SELECT chrom, pos FROM {self.table} WHERE id IN ({', '.join(rsid)})")
         try: return SnptoolDatabaseIterator(c.execute(f"SELECT chrom,pos FROM {self.table} WHERE id IN ({', '.join('?'*len(rsid))})", rsid))
-        except:
+        except sqlite3.Error as error:
             logger.warning(f"SnptoolDatabase: Unable to obtain rsids for 'reference = {self.reference}'. All rsids will be ignored.")
+            logger.debug(f"SnptoolDatabase: ERROR - {error}")
             return iter([])
 
     @property
@@ -108,7 +118,6 @@ class SnptoolDatabaseIterator(object):
 
     def __next__(self):
         if result := self.c.fetchone():        
-            logging.debug(f"{result}")
             return [result[0], result[1], result[1]]
         else:
             raise StopIteration
