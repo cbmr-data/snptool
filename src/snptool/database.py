@@ -39,8 +39,9 @@ class SnptoolDatabase(object):
             logging.info(f"SnptoolDatabase: Connected to sqlite database at path = '{self.path}', file = '{self.file}', table = '{self.table}'")
             self.cursor.execute("SELECT name FROM sqlite_master WHERE type='table';") # Getting all tables from sqlite_master
             logger.debug(f"SnptoolDatabase: sqlite tables = {self.cursor.fetchall()}")
-        except sqlite3.Error as error:
-            logger.error(f"SnptoolDatabase: Database Access Failed.", error)
+        except sqlite3.Error as error: 
+            logging.warning(f"SnptoolDatabase: Unable to connect to database at '{db_path}'. Functions requiring the database will not work.")
+            logging.error(f"SnptoolDatabase: ERROR - {error}")
             self.close()
 
     def close(self):
