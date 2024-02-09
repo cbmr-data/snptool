@@ -20,11 +20,22 @@ Properly formatted VCF files from dbSNP will have this information.
 """
 
 dosage = """
-Read the 'DS' field in the VCF files and output the BIMBAM Genotype File with dosage scores. This is default.
+Read the 'DS' field in the VCF files and output the BIMBAM Mean Genotype File with dosage scores. This is the default
+behaviour.
 """
 
 genotype = """
-Read the 'GT' field in the VCF files and output the BIMBAM Genotype File with genotype calls.
+Read the 'GT' field in the VCF files and output the BIMBAM Basic Genotype File with genotype calls. Automatically sets
+option '--no-indels'.
+"""
+
+indels = """
+Include indels and mulitallelic SNPs? Classical BIMBAM is only defined for bi-allelic SNPs, but 'indel' will include
+them in output if possible, while 'no-indel' will output only biallelic sites. 'indel' is default.
+"""
+
+location = """
+Create optional file containing SNP information. Contains SNP id, base-pair position, and chromosome number.
 """
 
 log = """
@@ -37,6 +48,10 @@ Include or suppress the header in VCF output
 
 output = """
 Output file name.
+"""
+
+probability = """
+Read the 'GP' field in the VCF files and output the BIMBAM Genotype Distribution Format with posterior probabilities.
 """
 
 regions = """

@@ -12,9 +12,8 @@ import logging
 import os
 import sys
 
-import cli.options as OPTIONS
+import snptool.options as OPTIONS
 import pklib
-import snptool 
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +33,7 @@ logger = logging.getLogger(__name__)
 @click.option('-h/-H', '--header/--no-header', default=True, show_default=True, help=OPTIONS.no_header)
 @click.option('-i', '--rsids', type=pklib.SampleList(mode='rb'), default=[], help=OPTIONS.rsids)
 @click.option('-o', '--output', type=click.File('w'), default='-', show_default=True, help=OPTIONS.output)
-@click.option('-r', '--regions', type=pklib.CSVList(), default=[], help=OPTIONS.regions)
+@click.option('-r', '--regions', type=pklib.BED3(), default=[], help=OPTIONS.regions)
 @click.pass_obj
 def extract(snpdb, files, build, header, output, rsids, regions):
     """
@@ -44,13 +43,17 @@ def extract(snpdb, files, build, header, output, rsids, regions):
 
     THIS COMMAND IS STILL EXPERIMENTAL; USE WITH CAUTION
     """
-    id_coords = list(snpdb.rsid2coords(rsids, build)) + regions
+    from pkstreamers import SNPstreamer
+    id_coords = list(map(lambda x: "\t".join(str(v) for v in x), list(snpdb.rsid2coords(rsids, build)) + regions))
+    header = "--with-header" if header else "--no-header"
     if not id_coords:
-        sys.exit("ERROR: No (usuable) SNP ids or coordinates found. Either you forgot to give any, or they failed parsing.")
+        logger.error(f" No (usuable) SNP ids or coordinates found. Either you forgot to give any, or they failed parsing.")
+        sys.exit("Terminating due to errors...")
     for fobj in files:
-        snps = snptool.SNPstream(fobj, header=header , regions=pklib.IntervalList(id_coords))
-        output.writelines(snps)
-        header = False # Do not print headers of anything but the first file
+        with SNPstreamer(fobj, command="view", options=header, regions=id_coords) as snps:
+            for snp in snps:
+                output.writelines(f"{snp}\n")
+        header = "--no-header" # Do not print headers of anything but the first file
 
 # --%%  END: Commands  %%--
 #
@@ -58,10 +61,11 @@ def extract(snpdb, files, build, header, output, rsids, regions):
 
 
 def main():
+    from snptool.src.pkdbs.SnptoolDatabase import SnptoolDatabase
     try:
         database_path = os.environ['SNPTOOL_DATABASE_PATH']
         dbsnp_build   = os.environ['SNPTOOL_DBSNP_BUILD']
-        obj = snptool.SnptoolDatabase(f"{database_path}/{dbsnp_build}.db")
+        obj = SnptoolDatabase(f"{database_path}/{dbsnp_build}.db")
     except KeyError:
         obj = None
     extract(auto_envvar_prefix='SNPTOOL', obj=obj)

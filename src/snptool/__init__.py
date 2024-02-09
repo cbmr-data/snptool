@@ -1,5 +1,4 @@
 
-from snptool.database import SnptoolDatabase
-from snptool.snptool import SNPstream, Querystream
-from snptool.bimbam import BIMBAMstream
+from .version import __version__
+from .cli import main as Snptool
 

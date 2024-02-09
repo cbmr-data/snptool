@@ -26,9 +26,9 @@ dynamic = ["version"]
 
 
 [project.scripts]
-snptool = "cli:Snptool"
-SNPextractor = "cli:Extract"
-vcf2bimbam = "cli:Bimbam"
+snptool = "snptool:Snptool"
+SNPextractor = "extract:Extract"
+vcf2bimbam = "bimbam:Bimbam"
 
 
 [tool.setuptools.dynamic]
