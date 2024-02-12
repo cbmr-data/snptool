@@ -17,7 +17,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "GNU-GLPv3"}
 dependencies = [
-    "click>=8.0",
+    "click>8.0",
     "numpy>1.23",
     "pandas>2.0",
     "isal>1.1.0",
@@ -26,11 +26,11 @@ dynamic = ["version"]
 
 
 [project.scripts]
-snptool = "snptool:Snptool"
-SNPextractor = "extract:Extract"
-vcf2bimbam = "bimbam:Bimbam"
+    snptool = "snptool:Snptool"
+    SNPextractor = "extract:Extract"
+    vcf2bimbam = "bimbam:Bimbam"
 
 
 [tool.setuptools.dynamic]
-version = {attr = "cli.version.__version__"}
+version = {attr = "snptool.version.__version__"}
 
