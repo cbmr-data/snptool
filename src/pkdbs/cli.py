@@ -6,7 +6,7 @@
 import click
 import logging
 
-import docs as OPTIONS
+from docs import OPTIONS
 
 logger = logging.getLogger(__name__)
 
