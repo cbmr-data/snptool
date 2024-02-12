@@ -1,5 +1,4 @@
 
-
 [build-system]
 requires = [
     "setuptools>=49",
@@ -8,19 +7,20 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-
 [project]
 name = "snptool"
 authors = [
     { name = "Carsten Friis Rundsten", email = "carsten.rundsten@sund.ku.dk" },
 ]
-description = "Write some description here..."
+description = "SNPTOOL is a collection of tools for working with SNPs or SNP-based formats."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "GNU-GLPv3"}
 dependencies = [
-    "click>=8.0.0",
-    "pandas>=2.0.0",
+    "click>=8.0",
+    "numpy>1.23",
+    "pandas>2.0",
+    "isal>1.1.0",
 ]
 dynamic = ["version"]
 
@@ -33,6 +33,4 @@ vcf2bimbam = "bimbam:Bimbam"
 
 [tool.setuptools.dynamic]
 version = {attr = "cli.version.__version__"}
-
-
 
