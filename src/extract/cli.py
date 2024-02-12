@@ -61,7 +61,7 @@ def extract(snpdb, files, build, header, output, rsids, regions):
 
 
 def main():
-    from snptool.src.pkdbs.SnptoolDatabase import SnptoolDatabase
+    from pkdbs.SnptoolDatabase import SnptoolDatabase
     try:
         database_path = os.environ['SNPTOOL_DATABASE_PATH']
         dbsnp_build   = os.environ['SNPTOOL_DBSNP_BUILD']
