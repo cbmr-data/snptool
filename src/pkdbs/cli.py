@@ -6,7 +6,7 @@
 import click
 import logging
 
-import snptool.options as OPTIONS
+import snptool.src.docs.options as OPTIONS
 
 logger = logging.getLogger(__name__)
 

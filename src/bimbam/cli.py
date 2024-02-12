@@ -11,7 +11,7 @@ import click
 import logging
 import sys
 
-import snptool.options as OPTIONS
+from docs import OPTIONS
 
 logger = logging.getLogger(__name__)
 

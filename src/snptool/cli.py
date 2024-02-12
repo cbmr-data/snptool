@@ -12,10 +12,10 @@ import logging
 import os
 
 from bimbam.cli import bimbam
+from docs import OPTIONS
 from extract.cli import extract
 from pkdbs.cli import builddb
 import snptool.epilog as EPILOG
-import snptool.options as OPTIONS
 from snptool.version import __version__
 
 # --%%  END: Perform Basic Setup  %%--

@@ -12,7 +12,7 @@ import logging
 import os
 import sys
 
-import snptool.options as OPTIONS
+from docs import OPTIONS
 import pklib
 
 logger = logging.getLogger(__name__)
