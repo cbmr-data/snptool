@@ -33,19 +33,13 @@ class BIMBAMstream(SubprocessHandler):
            sep:             Separator used in output. Should be one of [", ", " ", "\t", "; "].
         """
         if indels:
-            handler_command = ['bcftools', 'query', '--format', f"'{format_string}'", filename]
+            handler_command = ['bcftools', 'query', '--format', f"{format_string}", filename]
         else:
             reader_command  = ['bcftools', 'view', '--min-alleles', '2', '--max-alleles', '2', '--types', 'snps', filename]
-            handler_command = reader_command + ['|'] + ['bcftools', 'query', '--format', f"'{format_string}'"]
+            handler_command = ['bcftools', 'query', '--format', f"{format_string}"]
 
-# I could never get this guy to work. Something fails in closing the file?
-#        with SubprocessReader(reader_command) as reader:
-#            super().__init__(command=handler_command, input=reader, *args, **kwargs)
-# ...Or just stuff stdout directly into stdin
-#        ps = subprocess.Popen(['bcftools', 'query', '--list-samples', filename], stdout=subprocess.PIPE)
-#        return subprocess.check_output(['wc', '-l'], stdin=ps.stdout, text=True).rstrip()
-
-        super().__init__(" ".join(handler_command), shell=True, *args, **kwargs)
+        ps = subprocess.Popen(reader_command, stdout=subprocess.PIPE, text=True)
+        super().__init__(handler_command, input=ps.stdout, *args, **kwargs)
 
         self.samples = list(SubprocessReader(['bcftools', 'query', '--list-samples', filename]))
         self.indels = indels
@@ -62,10 +56,13 @@ class BIMBAMstream(SubprocessHandler):
     @staticmethod
     def _validate(self):
         """Validate stuff... No need to call super() here since the __init__'s super calls validate for the parent class."""
+        # Check samples
+        logger.debug(f" Samples found [0:10] = {self.samples[0:10] + ['...']}")
+        assert self.samples, f"ERROR! No samples found in file!"
         # Check self.nan
         legal_nans = ['?', 'N']
         assert self.nan in legal_nans, f"Illegal missing indicator specified. Indicator must be one of {legal_nans}"
         # Check self.sep
         legal_seps = [' ', ', ', '; ', '\t']
         assert self.sep in legal_seps, f"Illegal seperator specified. Seperator must be one of {legal_seps}"
-        logger.debug(f" Sucessfully validated {self}")
+        logger.debug(f" Successfully validated {self}")

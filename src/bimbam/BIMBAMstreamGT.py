@@ -41,7 +41,7 @@ class BIMBAMstreamGT(BIMBAMstream):
         Everything is a chani over variants and header, and we close the subprocesses already in init.
         filename:        A file with one SNP pr line.
         """
-        super().__init__(filename, format_string = "%ID, %ALT, %REF[, %GT]\\n", indels=False, *args, **kwargs)
+        super().__init__(filename, format_string = "%ID,  %ALT,  %REF[,  %GT]\\n", indels=False, *args, **kwargs)
         self.variants = list(self.process.stdout)
         self.header = [self.count_variants()]
         self.header.append(self.count_subjects())
@@ -63,7 +63,7 @@ class BIMBAMstreamGT(BIMBAMstream):
         else:
             raise StopIteration
         try:
-            (out, b1, b2, *genotypes) = line.split(self.sep)
+            (out, b1, b2, *genotypes) = line.split(",  ")
             alleles = map(lambda x: re.split("[|/]", x), genotypes)
             for gt in alleles:
                 try:

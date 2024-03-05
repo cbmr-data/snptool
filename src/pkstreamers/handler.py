@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 from .reader import SubprocessReader
 
+# TODO: The whole tempfile stuff could probably be done faster with threading and piping...
 
 class SubprocessHandler(SubprocessReader):
     def __init__(self, command, input=[], *args, **kwargs):
@@ -21,13 +22,11 @@ class SubprocessHandler(SubprocessReader):
         self.temp_input_file = tempfile.NamedTemporaryFile(mode='w+', delete=False)
         logger.debug(f" Temporary file created = '{self.temp_input_file.name}'")
         for line in input:
-            logger.debug(f" Writing to temp file - '{str(line)}'")
-            self.write_to_temp_file(f"{str(line)}\n")
-        logger.debug(f" Something")
-
-        myfileobj = open(self.temp_input_file.name, 'r')
-        super().__init__(command, stdin=myfileobj, *args, **kwargs)
-        logger.debug(f"  {self} - Initialized by Handler")
+            self.write_to_temp_file(f"{str(line).rstrip()}\n")
+        with open(self.temp_input_file.name, 'r') as myfileobj:
+            logger.debug(f" Temporary file re-opened")
+            super().__init__(command, stdin=myfileobj, *args, **kwargs)
+        logger.debug(f" {self} - Initialized by Handler")
 
     def write_to_temp_file(self, input_str):
         self.temp_input_file.write(input_str)

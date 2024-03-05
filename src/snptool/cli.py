@@ -12,9 +12,9 @@ import logging
 import os
 
 from bimbam.cli import bimbam
-from docs import OPTIONS
 from extract.cli import extract
 from pkdbs.cli import builddb
+from docs import OPTIONS
 import snptool.epilog as EPILOG
 from snptool.version import __version__
 
@@ -66,15 +66,21 @@ cli.add_command(builddb)
 # CLI: Add Extract command
 cli.add_command(extract)
 
+# CLI: Add GenoInfo command
 
 @cli.command(no_args_is_help=True, hidden=True)
 @click.argument('files')
 def test(files):
     """TEST COMMAND DO NOT USE"""
-    import pkstreamers
-    with pkstreamers.SNPstreamer(files) as handler:
-        for output_line in handler:
-            print(output_line)
+    from genoinfo import geno, info
+    from pkstreamers import SNPstreamer
+    genolist = list()
+    for fobj in files:
+        with SNPstreamer(fobj) as handler:
+            for output_line in handler:
+                print(output_line)
+                genolist.append(output_line.geno)
+    geno(genolist)
 
 # --%%  END: Commands  %%--
 #
