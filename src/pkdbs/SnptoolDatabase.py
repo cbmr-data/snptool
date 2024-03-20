@@ -78,7 +78,7 @@ class SnptoolDatabase(object):
         logger.debug(f" Searching for ids[0:10] = {rsid[0:10]}...")
         self.reference = reference
         c = self.conn.cursor()
-        logger.debug(f"SELECT chrom, pos FROM {self.table} WHERE id IN ({', '.join(rsid)})")
+        logger.debug(f" SELECT chrom, pos FROM {self.table} WHERE id IN ({', '.join(rsid)})")
         try: return SnptoolDbIterator(c.execute(f"SELECT chrom,pos FROM {self.table} WHERE id IN ({', '.join('?'*len(rsid))})", rsid))
         except sqlite3.Error as error:
             logger.warning(f" Unable to obtain rsids for 'reference = {self.reference}'. All rsids will be ignored.")

@@ -29,7 +29,7 @@ class SNPstreamer(SubprocessHandler):
            regions:  A list which returns text lines suitable for bcftools --regions-file."""
         command = ['bcftools', command] + shlex.split(options)
         command += ['--regions-file', '-', filename] if regions else [filename]
-        super().__init__(command, input=regions, *args, **kwargs)
+        super().__init__(command, input_data=regions, *args, **kwargs)
         self = self._process_header(filename)
 
         SNPstreamer._validate(self)

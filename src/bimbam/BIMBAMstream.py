@@ -39,7 +39,7 @@ class BIMBAMstream(SubprocessHandler):
             handler_command = ['bcftools', 'query', '--format', f"{format_string}"]
 
         ps = subprocess.Popen(reader_command, stdout=subprocess.PIPE, text=True)
-        super().__init__(handler_command, input=ps.stdout, *args, **kwargs)
+        super().__init__(handler_command, input_data=ps.stdout, *args, **kwargs)
 
         self.samples = list(SubprocessReader(['bcftools', 'query', '--list-samples', filename]))
         self.indels = indels

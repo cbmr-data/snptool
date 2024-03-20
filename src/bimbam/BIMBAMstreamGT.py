@@ -79,9 +79,9 @@ class BIMBAMstreamGT(BIMBAMstream):
         if self.process.stdout:
             try:
                 self.process.stdout.close()
-                super().close()
             except AttributeError:
                 self.process.stdout = None
+        super().close()
 
     def count_variants(self):
         """Calculate the number of snps/variants in the vcf file using 'bcftools | wc'."""
