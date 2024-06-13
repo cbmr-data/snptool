@@ -10,7 +10,9 @@ __version__ = """0.6.2"""
 # v0.6.2: Introduced threading in handler.py. Works (but not with 'head'; meh...)
 
 # TODO: In extract: The header is bogus if you concatinate several vcf files together.
-#           Easiest fix is probably to run bcftools concat on the data first. Only way to be sure.
+#           Easiest fix is probably to run bcftools concat on the data first (or last?). Only way to be sure.
+#           Did some testing: bcftools head can print header which bcftools concat can combine. This should work
+#           We just need something to control a temp dir.
 # TODO: Geno/Info
 # TODO: BIMBAM Add support for UKB's wonderful partial dosage scores?
 # TODO: (But not here...) Add support for phenotype file in phenotool.
