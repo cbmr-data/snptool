@@ -42,13 +42,17 @@ class SubprocessReader:
 
     def _monitor_stderr(self):
         """Monitor function which runs in the child thread."""
-        for line in self.process.stderr:
-            self._handle_error(line.strip())
+        try:
+            for line in self.process.stderr:
+                self._handle_error(line.strip())
+        except ValueError:
+            logger.debug(f"{self} - Stderr closed, stopping error monitor")
+        except Exception as e:
+            logger.error(f"{self} - Unexpected error: {e}")
 
     def _handle_error(self, error_message):
         """Defines error handling"""
         self.error_queue.put(error_message)
-        logger.debug(f" {self} - Detected an error: {error_message}")
 
     @staticmethod
     def _validate(self):
@@ -87,7 +91,10 @@ class SubprocessReader:
         while not self.error_queue.empty():
             error_message = self.error_queue.get()
             # Handle the error message (e.g., log, print, raise exception)
-            logger.error(f" {error_message}")
+            # Check for harmless STDERR messages
+            if error_message.startswith('Checking the headers and starting positions'):
+                continue
+            logger.error(f" {self} - Detected an error: {error_message}")
 
     def close(self):
         if self.process.stdout:

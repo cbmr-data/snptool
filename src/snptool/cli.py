@@ -13,10 +13,11 @@ import os
 
 from bimbam.cli import bimbam
 from extract.cli import extract
+from genoinfo.cli import genoinfo
 from pkdbs.cli import builddb
 from docs import OPTIONS
-import snptool.epilog as EPILOG
-from snptool.version import __version__
+import docs.epilog as EPILOG
+from .version import __version__
 
 # --%%  END: Perform Basic Setup  %%--
 #
@@ -67,6 +68,7 @@ cli.add_command(builddb)
 cli.add_command(extract)
 
 # CLI: Add GenoInfo command
+cli.add_command(genoinfo)
 
 @cli.command(no_args_is_help=True, hidden=True)
 @click.argument('files')

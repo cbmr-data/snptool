@@ -2,7 +2,6 @@
 #
 # --%%  Define shared help strings  %%--
 
-
 build = """
 The reference build for the VCF files. Primarily used together with '--rsids' for looking up rsids in dbsnp.
 """
@@ -19,19 +18,30 @@ What is the reference build for the VCF files? Default is to read this from the 
 Properly formatted VCF files from dbSNP will have this information.
 """
 
+digits = """
+The number of significant digits to which the output should be rounded.
+"""
+
 dosage = """
-Read the 'DS' field in the VCF files and output the BIMBAM Mean Genotype File with dosage scores. This is the default
+Read the 'DS' field in the VCF files and output the dosage scores. This is the default
 behaviour.
 """
 
+geno = """
+Name of the Geno file.
+"""
+
 genotype = """
-Read the 'GT' field in the VCF files and output the BIMBAM Basic Genotype File with genotype calls. Automatically sets
-option '--no-indels'.
+Read the 'GT' field in the VCF files and output the genotype calls.
 """
 
 indels = """
 Include indels and mulitallelic SNPs? Classical BIMBAM is only defined for bi-allelic SNPs, but 'indel' will include
 them in output if possible, while 'no-indel' will output only biallelic sites. 'indel' is default.
+"""
+
+info = """
+If specified with a valid filename, then an info file will be created with that name. Otherwise, no info file will be created.
 """
 
 location = """
@@ -46,12 +56,16 @@ no_header = """
 Include or suppress the header in VCF output
 """
 
+no_index = """
+Create index of bgzipped output file? Ignored unless output is bgzipped. [default: Yes if output is bgzipped]
+"""
+
 output = """
-Output file name.
+Output file name. Output will be bgzipped if, and only if, file name ends with '.gz'.
 """
 
 probability = """
-Read the 'GP' field in the VCF files and output the BIMBAM Genotype Distribution Format with posterior probabilities.
+Read the 'GP' field in the VCF files and output the genotype posterior probabilities.
 """
 
 regions = """
@@ -77,4 +91,8 @@ samples = """
 File with samples to include in the output. Samples will be outputted in the exact same order as in the sample file
 including outputting samples with missing values if no phenotype information was found. The sample file can be a plain
 text file with sample names or a VCF file with sample genotypes.
+"""
+
+sep = """
+Column separator used for both geno and info tables.
 """
