@@ -28,7 +28,7 @@ dynamic = ["version"]
     snptool = "snptool:Snptool"
     SNPextractor = "extract:Extract"
     vcf2bimbam = "bimbam:Bimbam"
-    vcf2genoinfo = "genoinfo:GenoInfo"
+    vcf2genoinfo = "genoinfo:Genoinfo"
 
 [tool.setuptools.dynamic]
 version = {attr = "snptool.version.__version__"}
