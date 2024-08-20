@@ -64,6 +64,7 @@ def genoinfo(files, digits, format_flag, geno, info, sep):
 
 
 def main():
+    import os
     from pkdbs.SnptoolDatabase import SnptoolDatabase
     try:
         database_path = os.environ['SNPTOOL_DATABASE_PATH']
