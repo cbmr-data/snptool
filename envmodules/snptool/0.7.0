@@ -21,6 +21,7 @@ proc ModulesDisplay { } {
    puts stderr "\nSNPtool is a collection of commonly used tools for manipulating various SNP and/or INDEL based formats."
    puts stderr "\tsnptool      - The core tool from where all functions are available."
    puts stderr "\tSNPextractor - Direct access to the 'snptool extract' command for extracting snps from vcf files."
+   puts stderr "\tvcf2genoinfo - Converts VCF file into the Geno & Info files of 'classical' SNPextractor."
 }
 
 
