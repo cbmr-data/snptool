@@ -7,7 +7,8 @@ The reference build for the VCF files. Primarily used together with '--rsids' fo
 """
 
 database_path = """
-Path to directory where snptool sqlite databases are stored.
+Path to directory where snptool sqlite databases are stored. Will read SNPTOOL_DATABASE_PATH if found in env. Otherwise
+uses current dir.
 """
 dbsnp_build = """
 Sets the build version of dbsnp to be used. Only some versions are supported.

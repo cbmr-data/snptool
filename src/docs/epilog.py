@@ -22,12 +22,12 @@ well. The same will happen if you use bcftools to fetch snps. Future versions wi
 """
 
 genoinfo = """
-NOTE: A Geno file requires unique ids which will be created by using the 'ID' column except when it's '.' (=> no id).
-In that case an ID is constructed like this 'CHR:POS:REF:VAR'. Probliems will likely arise if those IDs are not
-unique and the script may not report on this. It is up to you as user to ensure your IDs are unique.
+NOTE: A Geno file requires unique ids which will be created using the 'ID' column except when it's '.' (=> no id). In 
+that case an ID is constructed like this 'CHR:POS:REF:VAR'. Probliems will likely arise if those IDs are not unique and
+the script may not report on this. It is up to you as user to ensure your IDs are unique.
 
-NOTE: Because Geno files require the sample genotype matrix to be transposed it scales really poorly with the size of
-the vcf file(s). It is recommend to use 'snptool extract' first to get the precise list of variants desired.
+NOTE: Because Geno files require the sample genotype matrix to be transposed it scales poorly with the amount of
+snps/samples. It is recommend to use 'snptool extract' first to get the precise data list desired.
 """
 
 snptool = """

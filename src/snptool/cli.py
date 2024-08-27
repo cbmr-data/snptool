@@ -30,7 +30,7 @@ from .version import __version__
 # --%%  RUN: Commands  %%--
 
 @click.group(epilog=EPILOG.snptool)
-@click.option('--database-path', default=os.getcwd(), help=OPTIONS.database_path, show_default=True)
+@click.option('--database-path', default=os.getcwd(), help=OPTIONS.database_path)
 @click.option('--dbsnp-build', type=click.Choice(['b153','b155','b156'], case_sensitive=False), default='b156', help=OPTIONS.dbsnp_build, show_default=True)
 @click.option('--log', default="warning", help=OPTIONS.log, show_default=True)
 @click.version_option(version=__version__)
