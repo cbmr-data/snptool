@@ -1,2 +1,3 @@
 
-from .cli import genoinfo as GenoInfo
+from .cli import main as Genoinfo
+from .GenoInfo import GenoInfo

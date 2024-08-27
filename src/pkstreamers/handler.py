@@ -40,11 +40,3 @@ class SubprocessHandler(SubprocessReader):
             self.process.terminate()  # Or .wait() to let it finish
         super().close()
 
-# Example usage
-if __name__ == "__main__":
-    command = ["your_command_here"]
-    with SubprocessHandler(command) as handler:
-        handler.write_to_temp_file("Some input")
-        for output_line in handler:
-            print(output_line)
-

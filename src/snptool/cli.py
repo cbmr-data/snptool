@@ -13,10 +13,11 @@ import os
 
 from bimbam.cli import bimbam
 from extract.cli import extract
+from genoinfo.cli import genoinfo
 from pkdbs.cli import builddb
 from docs import OPTIONS
-import snptool.epilog as EPILOG
-from snptool.version import __version__
+import docs.epilog as EPILOG
+from .version import __version__
 
 # --%%  END: Perform Basic Setup  %%--
 #
@@ -29,7 +30,7 @@ from snptool.version import __version__
 # --%%  RUN: Commands  %%--
 
 @click.group(epilog=EPILOG.snptool)
-@click.option('--database-path', default=os.getcwd(), help=OPTIONS.database_path, show_default=True)
+@click.option('--database-path', default=os.getcwd(), help=OPTIONS.database_path)
 @click.option('--dbsnp-build', type=click.Choice(['b153','b155','b156'], case_sensitive=False), default='b156', help=OPTIONS.dbsnp_build, show_default=True)
 @click.option('--log', default="warning", help=OPTIONS.log, show_default=True)
 @click.version_option(version=__version__)
@@ -67,6 +68,7 @@ cli.add_command(builddb)
 cli.add_command(extract)
 
 # CLI: Add GenoInfo command
+cli.add_command(genoinfo)
 
 @cli.command(no_args_is_help=True, hidden=True)
 @click.argument('files')
