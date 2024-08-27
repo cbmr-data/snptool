@@ -15,7 +15,7 @@ authors = [
 description = "SNPTOOL is a collection of tools for working with SNPs or SNP-based formats."
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "GNU-GLPv3"}
+license = {text = "GNU-GPLv3"}
 dependencies = [
     "click>8.0",
     "isal>1.1.0",
